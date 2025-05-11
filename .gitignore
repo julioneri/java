@@ -10,6 +10,15 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
+# VS Code settings
+.vscode/
+
+# JetBrains IDEs (IntelliJ, PhpStorm, PyCharm etc)
+.idea/
+
+# Arquivos .iml
+*.iml
+
 # Package Files #
 *.jar
 *.war
