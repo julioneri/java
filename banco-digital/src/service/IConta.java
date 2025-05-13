@@ -1,14 +1,15 @@
 package service;
 
-import model.Conta;
+import exception.SaldoInsuficienteException;
+import exception.ValorInvalidoException;
 
 public interface IConta {
 
-    void sacar(double valor);
+    private void sacar(double valor) throws ValorInvalidoException, SaldoInsuficienteException;
 
-    void depositar(double valor);
+    private void depositar(double valor) throws ValorInvalidoException;
 
-    void transferir(double valor, Conta contaDestino);
+    private void transferir(double valor, String cpfDestinatario) throws ValorInvalidoException, SaldoInsuficienteException, IllegalArgumentException;
 
-    void imprimirExtrato();
+    /* void imprimirExtrato(); */
 }

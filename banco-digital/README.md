@@ -1,55 +1,69 @@
 # 🏦 Sistema Bancário em Java
 
-Este projeto simula um sistema bancário simples, permitindo a criação de clientes e contas bancárias (corrente ou poupança), além de realizar operações básicas como depósito, saque, transferência e visualização de extratos. Um dos focos do sistema é evitar duplicidade de contas pelo CPF.
+Este projeto simula um sistema bancário simples, permitindo a criação de clientes e contas bancárias (corrente ou poupança), além de realizar operações básicas como depósito, saque, transferência e visualização de extratos. O sistema também implementa a verificação de CPF para impedir a criação de múltiplas contas com o mesmo titular. As operações bancárias são realizadas de forma modular e segura, seguindo boas práticas de programação.
 
 ---
 
 ## ✅ Funcionalidades
 
-- Criação de clientes com nome e CPF;
-- Criação de contas bancárias (Corrente ou Poupança);
-- Verificação de CPF para impedir múltiplas contas com o mesmo titular;
-- Operações de:
+- **Criação de clientes** com nome e CPF;
+- **Criação de contas bancárias** (Corrente ou Poupança);
+- **Verificação de CPF** para impedir múltiplas contas com o mesmo titular;
+- **Operações de:**
   - Depósito;
   - Saque;
   - Transferência entre contas;
   - Impressão de extratos;
-- Sistema modular com uso de interface para definição das operações bancárias.
+- **Sistema modular**, com uso de interfaces para definir as operações bancárias;
+- **Notificação de transações** com detalhamento das operações realizadas.
 
 ---
 
 ## 🚀 Estrutura do Projeto
 
-Este projeto simula um sistema bancário simples, onde é possível criar, acessar e encerrar contas bancárias. Ele está organizado de forma modular, com diferentes pacotes para modelagem, serviços e interface de usuário. Abaixo está a descrição de cada pacote e suas responsabilidades.
+Este projeto simula um sistema bancário simples, com operações completas de conta, validação de dados e tratamento de exceções. Está organizado de forma modular em pacotes:
 
 ### 📁 **model/**
 
-Este pacote contém as classes que representam os modelos de dados do sistema, como o cliente e as diferentes tipos de contas bancárias.
+Contém as classes que representam os dados principais do sistema:
 
-* **Cliente.java**: Representa um cliente do banco, com os atributos `nome` e `cpf`.
-* **Conta.java**: Classe abstrata que serve como base para os tipos de contas bancárias. Ela implementa as operações básicas, como sacar, depositar e transferir, além de possuir informações comuns a todas as contas, como número, agência e saldo.
-* **ContaCorrente.java**: Representa uma conta corrente, herdando da classe `Conta` e implementando o método `imprimirExtrato`.
-* **ContaPoupanca.java**: Representa uma conta poupança, também herdando de `Conta` e implementando o método `imprimirExtrato`.
-* **TipoConta.java**: Enum opcional (caso seja necessário) para representar os tipos de conta disponíveis no sistema, como `CORRENTE` e `POUPANCA`.
+* **Cliente.java**: Representa um cliente com nome e CPF.
+* **Conta.java**: Classe abstrata base para as contas, com lógica de saque, depósito, transferência e notificação de transações.
+* **ContaCorrente.java** e **ContaPoupanca.java**: Especializações de `Conta`, com implementação personalizada de extrato.
+* **TipoConta.java**: Enum que representa os tipos de conta disponíveis (`CORRENTE`, `POUPANCA`).
 
 ### 📁 **service/**
 
-Este pacote contém a lógica de negócios do sistema, como a criação de contas e a verificação de duplicidade de CPF.
+Contém a lógica principal de manipulação das contas:
 
-* **IConta.java**: Interface que define os métodos de operações bancárias como sacar, depositar, transferir e imprimir extrato. As classes `ContaCorrente` e `ContaPoupanca` implementam essa interface.
-* **Banco.java**: A classe principal do serviço bancário, responsável por gerenciar as contas no sistema. Aqui é onde são feitas as operações de criação de contas, validação de CPF e acesso às contas.
+* **Banco.java**: Gerencia as contas, criação, busca e validação de CPF.
+* **IConta.java**: Interface que define as operações essenciais de uma conta bancária.
+
+### 📁 **exception/**
+
+Contém exceções personalizadas que ajudam no controle e na legibilidade do código:
+
+* **ContaInexistenteException.java**: Lançada quando uma conta não é encontrada.
+* **SaldoInsuficienteException.java**: Lançada ao tentar sacar/transferir mais do que o saldo disponível.
+* **ValorInvalidoException.java**: Lançada quando um valor negativo ou nulo é informado em uma operação financeira.
+
+### 📁 **util/**
+
+Contém classes utilitárias auxiliares:
+
+* **ValidadorDeValor.java**: Verifica se um valor é positivo antes de realizar operações financeiras.
 
 ### 📁 **ui/**
 
-Este pacote contém as interações de interface com o usuário.
+Controla a interação com o usuário (via terminal):
 
-* **OperacoesContaMenu.java**: Classe responsável por exibir o menu inicial para o usuário, permitindo a criação, acesso e encerramento de contas. Ela interage com o banco e chama os métodos necessários para realizar essas operações.
+* **OperacoesContaMenu.java**: Apresenta menus de criação e gerenciamento de contas, chamando os métodos do serviço bancário.
 
 ### 📁 **app/**
 
-Este pacote contém a classe principal que executa o programa.
+Contém o ponto de entrada da aplicação:
 
-* **Main.java**: O ponto de entrada do programa. Aqui é onde o menu é exibido e as operações são iniciadas.
+* **Main.java**: Inicia o programa e apresenta o menu inicial.
 
 ---
 
@@ -57,39 +71,54 @@ Este pacote contém a classe principal que executa o programa.
 
 ```
 src/
+src/
 ├── app/
 │   └── Main.java
+├── exception/
+│   ├── ContaInexistenteException.java
+│   ├── SaldoInsuficienteException.java
+│   └── ValorInvalidoException.java
 ├── model/
 │   ├── Cliente.java
 │   ├── Conta.java
 │   ├── ContaCorrente.java
 │   ├── ContaPoupanca.java
-│   └── TipoConta.java  (opcional)
+│   └── TipoConta.java
 ├── service/
-│   ├── IConta.java
-│   └── Banco.java
+│   ├── Banco.java
+│   └── IConta.java
 ├── ui/
 │   └── OperacoesContaMenu.java
+└── util/
+    └── ValidadorDeValor.java
+
 ```
 
 ---
 
 ## 🚧 Melhorias Futuras
 
-* Sistema de autenticação de cliente;
-* Persistência de dados com arquivos ou banco de dados;
-* Interface gráfica (GUI) para experiência visual;
-* Relatórios e histórico de operações.
+- Sistema de autenticação de cliente para maior segurança;
+- Persistência de dados com arquivos ou banco de dados, permitindo que as informações do sistema sejam salvas entre sessões;
+- Interface gráfica (GUI) para uma experiência visual mais agradável e interativa;
+- Relatórios e histórico de operações para melhor acompanhamento dos usuários.
 
 ---
 
 ## ✍️ Autor
 
-Desenvolvido por **Júlio César (julioneri)**
-💼 Projeto com fins didáticos para prática da linguagem Java e orientação a objetos.
+Desenvolvido por **Júlio César (julioneri)**  
+💼 Projeto com fins didáticos para a prática de linguagem Java e orientação a objetos.
 
 ---
 
 ## 📄 Licença
 
-Este projeto está licenciado sob a [MIT License](LICENSE) – sinta-se livre para usá-lo como base, melhorar ou contribuir.
+Este projeto está licenciado sob a [MIT License](../LICENSE) – sinta-se livre para usá-lo como base, melhorar ou contribuir.
+
+---
+
+### Observações:
+
+1. O sistema garante que **não haverá duplicidade de contas** associadas ao mesmo CPF, evitando inconsistências de dados no banco.
+2. As operações de **notificação de transações** fornecem informações detalhadas sobre as movimentações realizadas, incluindo o tipo de serviço (Saque, Depósito, Transferência), valores e saldos atualizados.

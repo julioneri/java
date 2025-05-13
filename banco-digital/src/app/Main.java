@@ -10,6 +10,6 @@ public class Main {
         Banco banco = new Banco();
         OperacoesContaMenu menu = new OperacoesContaMenu(scanner, banco); // Inicia o menu principal
 
-        menu.exibirMenuInicial();
+        menu.menuInicial();
     }
 }

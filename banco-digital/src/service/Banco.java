@@ -9,26 +9,26 @@ import model.ContaPoupanca;
 import model.TipoConta;
 
 public class Banco {
-    private String nome;        // Nome do banco (não utilizado ainda)
-    private List<Conta> contas; // Lista de todas as contas cadastradas
+    private String nome;               // Nome do banco (não utilizado ainda)
+    private static List<Conta> contas; // Lista de todas as contas cadastradas
 
     public Banco() {
-        this.contas = new ArrayList<>(); // Inicializa a lista de contas
+        Banco.contas = new ArrayList<>(); // Inicializa a lista de contas
     }
-
-    // Método que verifica se já existe uma conta com o mesmo CPF
-    private boolean cpfJaCadastrado(String cpfCliente) {
+        
+    // Método que verifica se existe uma conta com o CPF informado
+    public static Conta buscarCpf(String cpfProcurado) {
         return contas.stream()
-                .anyMatch(conta -> conta.getCliente().getCpf().equals(cpfCliente));
+                .filter(conta -> conta.getCliente().getCpf().equals(cpfProcurado))
+                .findFirst()
+                .orElse(null);
     }
 
-    public String criarConta(String nomeCliente, String cpfCliente, TipoConta tipoConta) {
+    public String criarConta(String nomeCliente, String cpfCliente, TipoConta tipoConta) throws IllegalArgumentException {
 
-        if (!contas.isEmpty()) {
-            // Verifica se já existe uma conta com o mesmo CPF
-            if(cpfJaCadastrado(cpfCliente)) {
-                return "Falha ao criar conta: O CPF fornecido já foi cadastrado.";
-            }
+        // Verifica se já existe uma conta com o mesmo CPF  
+        if (buscarCpf(cpfCliente) != null) {
+            throw new IllegalArgumentException("Já existe uma conta utilizando o CPF informado.");  
         }
 
         // Cria novo cliente
@@ -38,15 +38,23 @@ public class Banco {
         Conta novaConta;
         
         if(tipoConta == TipoConta.CORRENTE) {
-            novaConta = new ContaPoupanca(cliente);
-        } else if (tipoConta == TipoConta.POUPANCA) {
             novaConta = new ContaCorrente(cliente);
+        } else if (tipoConta == TipoConta.POUPANCA) {
+            novaConta = new ContaPoupanca(cliente);
         } else {
             return "Falha ao criar conta: Tipo de conta inválido.";
         }
         
         contas.add(novaConta); // Adiciona a nova conta à lista
         return tipoConta.getDescricao() + " criada com sucesso! Bem-vindo(a), " + nomeCliente + "!";
+    }
+
+    
+    public Conta acessarConta(String cpfTitular) {
+        return contas.stream()
+            .filter(conta -> conta.getCliente().getCpf().equals(cpfTitular))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("O CPF informado não corresponde a uma conta existente."));
     }
 
     protected String getNome() {
