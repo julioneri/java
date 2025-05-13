@@ -71,7 +71,6 @@ Contém o ponto de entrada da aplicação:
 
 ```
 src/
-src/
 ├── app/
 │   └── Main.java
 ├── exception/
